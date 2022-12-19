@@ -23,54 +23,6 @@ public class Calzados {
 	private String tipoCalzado;
 	private String rut;
 	private Integer stockTienda;
-	private double precio;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNombreModelo() {
-		return nombreModelo;
-	}
-
-	public void setNombreModelo(String nombreModelo) {
-		this.nombreModelo = nombreModelo;
-	}
-
-	public String getTipoCalzado() {
-		return tipoCalzado;
-	}
-
-	public void setTipoCalzado(String tipoCalzado) {
-		this.tipoCalzado = tipoCalzado;
-	}
-
-	public String getRut() {
-		return rut;
-	}
-
-	public void setRut(String rut) {
-		this.rut = rut;
-	}
-
-	public Integer getStockTienda() {
-		return stockTienda;
-	}
-
-	public void setStockTienda(Integer stockTienda) {
-		this.stockTienda = stockTienda;
-	}
-
-	public double getPrecio() {
-		return precio;
-	}
-
-	public void setPrecio(double precio) {
-		this.precio = precio;
-	}
+	private Double precio;
 
 }
