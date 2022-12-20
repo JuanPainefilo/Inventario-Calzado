@@ -27,7 +27,7 @@ public class SwaggerConfig {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.apiInfo(apiInfo())
 				.select()
-				.paths(regex("/inventario.*"))
+				.paths(regex("/.*"))
 				.build();
 	}
 
