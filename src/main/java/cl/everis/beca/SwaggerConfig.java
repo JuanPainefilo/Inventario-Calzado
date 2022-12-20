@@ -23,11 +23,22 @@ public class SwaggerConfig {
 	}
 
 	@Bean
-	public Docket newApi() {
+	public Docket calzadosApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("Inventario")
 				.apiInfo(apiInfo())
 				.select()
-				.paths(regex("/.*"))
+				.paths(regex("/calzadosInv.*"))
+				.build();
+	}
+	
+	@Bean
+	public Docket ventasApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("Ventas")
+				.apiInfo(apiInfo())
+				.select()
+				.paths(regex("/ventas.*"))
 				.build();
 	}
 
