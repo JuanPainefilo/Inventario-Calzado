@@ -28,7 +28,7 @@ public class SwaggerConfig {
 				.groupName("Inventario")
 				.apiInfo(apiInfo())
 				.select()
-				.paths(regex("/calzadosInv.*"))
+				.paths(regex("/Inventario.*"))
 				.build();
 	}
 	
