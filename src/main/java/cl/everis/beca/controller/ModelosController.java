@@ -22,11 +22,18 @@ public class ModelosController {
 
 	@PostMapping(value = "/buscarPorNombreModelo", produces = "application/json")
 	public ResponseEntity<Modelos> buscarPorNombreModelo(@RequestParam String nombreModelo) {
+		if (null == nombreModelo || nombreModelo.isBlank()) {
+			return new ResponseEntity<Modelos>(HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity<Modelos>(modelosServices.findByNombreModelo(nombreModelo), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = "/buscarPorNombreModeloSimilar", produces = "application/json")
-    public ResponseEntity<List<Modelos>> buscarPorNombreModeloSimilar(@RequestParam String nombreModelo) {
-        return new ResponseEntity<List<Modelos>>(modelosServices.findByNombreModeloSimilar(nombreModelo), HttpStatus.OK);
-    }
+	public ResponseEntity<List<Modelos>> buscarPorNombreModeloSimilar(@RequestParam String nombreModelo) {
+		if (null == nombreModelo || nombreModelo.isBlank()) {
+			return new ResponseEntity<List<Modelos>>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<List<Modelos>>(modelosServices.findByNombreModeloSimilar(nombreModelo),
+				HttpStatus.OK);
+	}
 }

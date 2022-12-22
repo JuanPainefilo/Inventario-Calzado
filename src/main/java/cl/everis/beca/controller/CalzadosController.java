@@ -1,6 +1,9 @@
 package cl.everis.beca.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,21 +24,28 @@ public class CalzadosController {
 	private CalzadosServices calzadosServices;
 
 	/**
-	 * @param Recibe todos los elementos asociados al registro de un calzado en la BD
+	 * @param Recibe todos los elementos asociados al registro de un calzado en la
+	 *               BD
 	 * @return el objeto con los elementos ingresados
 	 */
 	@PostMapping(value = "/agregarCalzado", produces = "application/json")
 	public ResponseEntity<Calzados> agregar(@RequestParam String nombreCalzado, Integer stockTienda, Double precio,
 			String nombreModelo) {
+		if (null == nombreCalzado || stockTienda <= 0 || precio <= 0 || null == nombreModelo) {
+			return new ResponseEntity<Calzados>(HttpStatus.BAD_REQUEST);
+		}
 		return calzadosServices.agregarCalzado(nombreModelo, stockTienda, precio, nombreModelo);
 	}
 
 	/**
-	 * @param recibe el numero de id 
+	 * @param recibe el numero de id
 	 * @return el calzado que coincida con la id proporcionada
 	 */
 	@GetMapping(value = "/buscarPorId", produces = "application/json")
 	public ResponseEntity<Calzados> buscarPorId(@RequestParam Long id) {
+		if (id <= 0) {
+			return new ResponseEntity<Calzados>(HttpStatus.BAD_REQUEST);
+		}
 		return calzadosServices.buscarPorId(id);
 	}
 
@@ -44,7 +54,10 @@ public class CalzadosController {
 	 * @return todos los calzados que coincidan con el calzado entregado
 	 */
 	@GetMapping(value = "/buscarPorModelo", produces = "application/json")
-	public ResponseEntity buscarCalzadoPorModelo(@RequestParam(defaultValue = "") String nombreModelo) {
+	public ResponseEntity<List<Calzados>> buscarCalzadoPorModelo(@RequestParam(defaultValue = "") String nombreModelo) {
+		if (nombreModelo.equalsIgnoreCase("")) {
+			return new ResponseEntity<List<Calzados>>(HttpStatus.BAD_REQUEST);
+		}
 		return calzadosServices.buscarCalzadoPorModelo(nombreModelo);
 	}
 
@@ -53,8 +66,11 @@ public class CalzadosController {
 	 * @return el objeto modificado dentro del sistema y como quedaria
 	 */
 	@PostMapping(value = "/editarRegistros", produces = "application/json")
-	public Calzados editarInformacion(@RequestBody Calzados calzado) {
-		return calzadosServices.editarDatos(calzado);
+	public ResponseEntity<Calzados> editarInformacion(@RequestBody Calzados calzado) {
+		if (null == calzado.getId() || calzado.getId() <= 0) {
+			return new ResponseEntity<Calzados>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Calzados>(calzadosServices.editarDatos(calzado), HttpStatus.OK);
 	}
 
 	/**
@@ -63,6 +79,9 @@ public class CalzadosController {
 	 */
 	@DeleteMapping(value = "/eliminarRegistro", produces = "application/json")
 	public ResponseEntity<Calzados> eliminarRegistro(@RequestParam Long id) {
+		if (null == id || id <= 0) {
+			return new ResponseEntity<Calzados>(HttpStatus.BAD_REQUEST);
+		}
 		return calzadosServices.eliminarRegistro(id);
 	}
 }

@@ -37,28 +37,19 @@ public class CalzadosServices {
 			String nombreModelo) {
 		Calzados calzado = new Calzados();
 		Modelos modelo = new Modelos();
-		if (nombreCalzado == null || stockTienda == null || precio == null) {
-			return new ResponseEntity<Calzados>(HttpStatus.NOT_ACCEPTABLE);
+		calzado.setNombreCalzado(nombreCalzado);
+		calzado.setPrecio(precio);
+		calzado.setStockTienda(stockTienda);
+		modelo = modelosRepository.findByNombreModelo(nombreModelo);
+		if (modelosRepository.findByNombreModelo(nombreModelo) == null) {
+			Modelos auxModelo = new Modelos();
+			auxModelo.setNombreModelo(nombreModelo);
+			modelosRepository.save(auxModelo);
+			calzado.setModelo(auxModelo);
+			return new ResponseEntity<Calzados>(calzadosRepository.save(calzado), HttpStatus.OK);
 		} else {
-			if (precio == 0 || stockTienda == 0) {
-				return new ResponseEntity<Calzados>(HttpStatus.NOT_ACCEPTABLE);
-			} else {
-				calzado.setNombreCalzado(nombreCalzado);
-				calzado.setPrecio(precio);
-				calzado.setStockTienda(stockTienda);
-				modelo = modelosRepository.findByNombreModelo(nombreModelo);
-				if (modelosRepository.findByNombreModelo(nombreModelo) == null) {
-					Modelos auxModelo = new Modelos();
-					auxModelo.setNombreModelo(nombreModelo);
-					modelosRepository.save(auxModelo);
-					calzado.setModelo(auxModelo);
-					return new ResponseEntity<Calzados>(calzadosRepository.save(calzado), HttpStatus.OK);
-				} else {
-					calzado.setModelo(modelo);
-					return new ResponseEntity<Calzados>(calzadosRepository.save(calzado), HttpStatus.OK);
-				}
-
-			}
+			calzado.setModelo(modelo);
+			return new ResponseEntity<Calzados>(calzadosRepository.save(calzado), HttpStatus.OK);
 		}
 	}
 
@@ -68,10 +59,6 @@ public class CalzadosServices {
 	 */
 	public ResponseEntity<List<Calzados>> buscarCalzadoPorModelo(String nombreModelo) {
 		Modelos modelosEncontrados = new Modelos();
-
-		if (modelosRepository.findByNombreModelo(nombreModelo) == null || nombreModelo == null) {
-			return new ResponseEntity<List<Calzados>>(HttpStatus.NOT_FOUND);
-		}
 		modelosEncontrados = modelosRepository.findByNombreModelo(nombreModelo);
 		Modelos auxModelo = modelosEncontrados;
 		return new ResponseEntity<List<Calzados>>(auxModelo.getCalzados(), HttpStatus.OK);

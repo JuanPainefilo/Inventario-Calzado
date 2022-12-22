@@ -3,6 +3,7 @@ package cl.everis.beca.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -50,6 +51,13 @@ public class VentasController {
 	@GetMapping(value = "/buscar", produces = "application/json")
 	public ResponseEntity<List<Ventas>> buscarVarios(@RequestParam(defaultValue = "") String rut,
 			@RequestParam(defaultValue = "") String fechaInicio, @RequestParam(defaultValue = "") String fechaTermino) {
+		if (rut.isBlank() && (fechaInicio.isBlank() || fechaTermino.isBlank())) {
+			return new ResponseEntity<List<Ventas>>(HttpStatus.BAD_REQUEST);
+		}
+		if ((!rut.isBlank() && (!fechaInicio.isBlank() && fechaTermino.isBlank()))
+				|| (!rut.isBlank() && (fechaInicio.isBlank() && !fechaTermino.isBlank()))) {
+			return new ResponseEntity<List<Ventas>>(HttpStatus.BAD_REQUEST);
+		}
 		return ventasServices.buscar(rut, fechaInicio, fechaTermino);
 	}
 
@@ -61,6 +69,9 @@ public class VentasController {
 	 */
 	@GetMapping(value = "/buscarPorId", produces = "application/json")
 	public ResponseEntity<Ventas> buscar(@RequestParam Long id) {
+		if (null == id || id <= 0) {
+			return new ResponseEntity<Ventas>(HttpStatus.BAD_REQUEST);
+		}
 		return ventasServices.buscarPorId(id);
 	}
 
@@ -75,6 +86,15 @@ public class VentasController {
 	@PostMapping(value = "/hacerVenta", produces = "application/json")
 	public ResponseEntity<Ventas> vender(@RequestParam String rut, @RequestParam Long[] articulos,
 			@RequestParam Integer[] cantidad) {
+		if (null == rut || null == articulos || null == cantidad) {
+			return new ResponseEntity<Ventas>(HttpStatus.BAD_REQUEST);
+		}
+		if (rut.isBlank() || articulos.length <= 0 || cantidad.length <= 0) {
+			return new ResponseEntity<Ventas>(HttpStatus.BAD_REQUEST);
+		}
+		if (articulos.length != cantidad.length) {
+			return new ResponseEntity<Ventas>(HttpStatus.BAD_REQUEST);
+		}
 		return ventasServices.hacerVenta(rut, articulos, cantidad);
 	}
 
@@ -86,6 +106,9 @@ public class VentasController {
 	 */
 	@PatchMapping(value = "/anularVenta", produces = "application/json")
 	public ResponseEntity<Ventas> anularVenta(@RequestParam Long id) {
+		if (null == id || id <= 0) {
+			return new ResponseEntity<Ventas>(HttpStatus.BAD_REQUEST);
+		}
 		return ventasServices.anularVenta(id);
 	}
 }

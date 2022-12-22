@@ -17,7 +17,7 @@ public class SwaggerConfig {
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
 				.title("Transaccion Calzado")
-				.description("Sistema de inventario mas transacciones realizadas para el descuento")
+				.description("Sistema de inventario mas transacciones de Zapateria")
                 .version("0.1")
 				.build();
 	}

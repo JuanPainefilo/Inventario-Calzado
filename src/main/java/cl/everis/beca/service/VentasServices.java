@@ -113,6 +113,7 @@ public class VentasServices {
 	 * Realiza la rebaja usando el servicio de Inventario de acuerdo a la cantidad
 	 * de cada articulo a comprar articulo[i] es la id del articulo a comprar,
 	 * mientras que cantidad[i] es la cantidad de dicho articulo a comprar
+	 * Las rutas de busqueda y edicion de stock se deben ingresar en el properties
 	 * 
 	 * @param rutCliente Cliente que realiza la compra
 	 * @param articulos  Lista de ids de articulos a comprar. Cada articulo debe
@@ -124,9 +125,6 @@ public class VentasServices {
 	 */
 	public ResponseEntity<Ventas> hacerVenta(String rutCliente, Long[] articulos, Integer[] cantidad) {
 		if (!Util.validarRut(rutCliente)) {
-			return new ResponseEntity<Ventas>(HttpStatus.BAD_REQUEST);
-		}
-		if (articulos.length != cantidad.length) {
 			return new ResponseEntity<Ventas>(HttpStatus.BAD_REQUEST);
 		}
 		for (int i = 0; i < articulos.length; i++) {
